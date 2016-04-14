@@ -21,7 +21,7 @@
 		      <b><input id="back" type="button" value="返回" class="btn btn-sm btn-info"/>&nbsp;表名称</b>
 		  </a>
 		   <c:forEach items="${tableInfos }" var="t" varStatus="s">
-               <a href="javascript:void(0);" class="list-group-item" data-linkname="${t.name }">${s.index+1 }.&nbsp;${t.name }&nbsp;${t.comment }</a>
+               <a href="javascript:void(0);" class="list-group-item menuitem" data-linkname="${t.name }">${s.index+1 }.&nbsp;${t.name }&nbsp;${t.comment }</a>
            </c:forEach>
 		</div>
      </div>
@@ -80,6 +80,7 @@
 <script type="text/javascript" src="<%=basePath%>resources/js/jquery.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>resources/js/smartfloat.jquery.js"></script>
 <script type="text/javascript" src="<%=basePath%>resources/js/postform.jquery.js"></script>
+<script type="text/javascript" src="<%=basePath%>resources/js/inviewport.jquery.js"></script>
 <script type="text/javascript">
 	$(function() {
 		$(".list-group-item").on("click", function() {
@@ -90,6 +91,23 @@
 		});
 		$("#back").on("click", function() {
 			$.postForm("<%=basePath %>db/configConn",{host:'${dBConnInfo.host}',port:'${dBConnInfo.port}',username:'${dBConnInfo.username}', password:'${dBConnInfo.password}'});
+		});
+		var s = $("#menus").offset().top + $("#menus").height() - $(window).height();
+		var top = $("#menus").offset().top;
+		$(window).scroll(function() {
+			var scollTop = $(this).scrollTop();
+			console.info("scollTop:" + scollTop + ",s:" + s);
+			if(scollTop > s) {
+				$("#menus").css({position:"fixed",top: -($("#menus").height() - $(window).height()) - top});
+			} else {
+				$("#menus").css({position:"fixed",top: -(scollTop - top)});
+			}
+			
+			var aId = $('.panel:in-viewport').attr("id");
+			if(aId) {
+				$("#menus [data-linkname]").removeClass("active");
+				$("#menus [data-linkname='"+aId+"']").addClass("active");
+			}
 		});
 	});
 </script>
