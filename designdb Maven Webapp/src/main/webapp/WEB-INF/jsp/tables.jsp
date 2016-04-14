@@ -21,7 +21,7 @@
 		      <b><input id="back" type="button" value="返回" class="btn btn-sm btn-info"/>&nbsp;表名称</b>
 		  </a>
 		   <c:forEach items="${tableInfos }" var="t" varStatus="s">
-               <a href="javascript:void(0);" class="list-group-item menuitem" data-linkname="${t.name }">${s.index+1 }.&nbsp;${t.name }&nbsp;${t.comment }</a>
+               <a href="javascript:void(0);" class="list-group-item menuitem <c:if test='${s.index == 0 }'>active</c:if> " data-linkname="${t.name }">${s.index+1 }.&nbsp;${t.name }&nbsp;${t.comment }</a>
            </c:forEach>
 		</div>
      </div>
@@ -96,7 +96,6 @@
 		var top = $("#menus").offset().top;
 		$(window).scroll(function() {
 			var scollTop = $(this).scrollTop();
-			console.info("scollTop:" + scollTop + ",s:" + s);
 			if(scollTop > s) {
 				$("#menus").css({position:"fixed",top: -($("#menus").height() - $(window).height()) - top});
 			} else {
