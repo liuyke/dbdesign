@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.liuyk.desgin.model.Column;
 import org.liuyk.desgin.model.DBConnInfo;
 import org.liuyk.desgin.model.TableInfo;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 @SuppressWarnings("unchecked")
 @Service
 public class MySqlDBService extends JDBCTemplate implements IDBService {
+	
+	private static final Logger log = Logger.getLogger(MySqlDBService.class);
 	
 	private static final String MYSQL_SCHEMA = "information_schema";
 	private static final String MYSQL_PRIMARY = "PRI";
@@ -54,6 +57,9 @@ public class MySqlDBService extends JDBCTemplate implements IDBService {
 			TableInfo tableInfo = queryList.get(0);
 			List<Column> columns = showColumns(connInfo, schema, tableInfo.getName());
 			tableInfo.setColumns(columns);
+			
+			List<String> indexColumns = showIndexColumns(connInfo, schema, tableName);
+			tableInfo.setIndexColumns(indexColumns);
 			return tableInfo;
 		}
 		return null;
@@ -80,6 +86,23 @@ public class MySqlDBService extends JDBCTemplate implements IDBService {
 			}
 		}, schema, tableName);
 		return queryList;
+	}
+
+	@Override
+	public List<String> showIndexColumns(DBConnInfo connInfo, String schema, String tableName) {
+		return (List<String>) queryList(connInfo, "show index from " + tableName + " where key_name != 'PRIMARY'", schema, new Callback<String>() {
+			@Override
+			public List<String> doInResultCallback(ResultSet rs) throws SQLException {
+				List<String> list = new ArrayList<String>();
+				while(rs.next()) {
+					String column = rs.getString("Column_name");
+					if(!list.contains(column)) {
+						list.add(column);
+					}
+				}
+				return list;
+			}
+		});
 	}
 	
 }

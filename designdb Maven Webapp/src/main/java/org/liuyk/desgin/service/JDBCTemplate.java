@@ -7,12 +7,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.liuyk.desgin.model.DBConnInfo;
 
 public abstract class JDBCTemplate {
-
+	private static final Logger log = Logger.getLogger(JDBCTemplate.class);
+	
 	public abstract String jdbcUrl(String host);
 	
 	public Connection openConnection(DBConnInfo connInfo) {
@@ -59,16 +62,19 @@ public abstract class JDBCTemplate {
 		}
 		
 		if(schema != null && !"".equals(schema.trim())) {
+			log.debug("Excute SQL: use " + schema);
 			execute(conn, "use " + schema);
 		}
 		
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
+			log.debug("Query SQL: " + sql);
 			ps = conn.prepareStatement(sql);
 			if(args != null) {
 				for (int i = 1; i <= args.length; i++) {
 					Object object = args[i - 1];
+					log.debug("Query Parameter pos:" + i + ",value:" + object);
 					ps.setObject(i, object);
 				}
 			}

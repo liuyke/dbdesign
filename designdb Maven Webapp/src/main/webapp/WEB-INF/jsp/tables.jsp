@@ -54,6 +54,21 @@
                         </c:forEach>
 						</tbody>
 					</table>
+					<c:if test="${not empty t.indexColumns }">
+						<table class="table table-bordered text-center bg-info">
+						   <tr>
+						   <td style="width: 15%;"><b>索引字段</b></td>
+						   <td class="text-left">
+						      <c:forEach items="${t.indexColumns }" var="c" varStatus="s">
+						          <b>
+						          ${c }
+						          <c:if test="${s.index+1 < t.indexColumns.size()}">,&nbsp;</c:if>
+						          </b>
+						      </c:forEach>
+						   </td>
+						   </tr>
+						</table>
+					</c:if>
 				</div>
 			</div>
 		</c:forEach>

@@ -9,8 +9,8 @@ public class TableInfo implements Serializable {
 
 	private String name;
 	private String comment;
-
 	private List<Column> columns;
+	private List<String> indexColumns;
 	
 	public TableInfo(String name, String comment) {
 		super();
@@ -45,10 +45,19 @@ public class TableInfo implements Serializable {
 		this.columns = columns;
 	}
 
+	public List<String> getIndexColumns() {
+		return indexColumns;
+	}
+
+	public void setIndexColumns(List<String> indexColumns) {
+		this.indexColumns = indexColumns;
+	}
+
 	@Override
 	public String toString() {
 		return "TableInfo [name=" + name + ", comment=" + comment
-				+ ", columns=" + columns + "]";
+				+ ", columns=" + columns + ", indexColumns=" + indexColumns
+				+ "]";
 	}
 
 	

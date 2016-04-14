@@ -19,4 +19,6 @@ public interface IDBService {
 	
 	public List<Column> showColumns(DBConnInfo connInfo, String schema, String tableName);
 	
+	public List<String> showIndexColumns(DBConnInfo connInfo, String schema, String tableName);
+	
 }
